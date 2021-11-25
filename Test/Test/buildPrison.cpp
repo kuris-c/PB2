@@ -178,7 +178,7 @@ void checkActions()
 	if (player.hasLighter == true) playerActions[20].playerPermission = true;
 	playerActions[21].playerPermission = true;
 	playerActions[22].playerPermission = true;
-	playerActions[23].playerPermission = true;
+	playerActions[23].playerPermission = false;
 
 	//ROOM SPECIFIC ACTIONS
 	switch (playerLocation)
@@ -193,6 +193,8 @@ void checkActions()
 		//ACTIONS
 		playerActions[24].playerPermission = true;
 		if (player.hasBoardGame) playerActions[25].playerPermission = true;
+
+		playerActions[21].playerPermission = false;
 		break;
 	case 1: /*Cell Block B*/
 		//LOCATIONS
@@ -202,6 +204,8 @@ void checkActions()
 		//ACTIONS
 		playerActions[24].playerPermission = true;
 		if (player.hasBoardGame) playerActions[25].playerPermission = true;
+
+		playerActions[21].playerPermission = false;
 		break;
 	case 2: /*Cell Block C*/
 		//LOCATIONS
@@ -211,6 +215,8 @@ void checkActions()
 		//ACTIONS
 		playerActions[24].playerPermission = true;
 		if (player.hasBoardGame) playerActions[25].playerPermission = true;
+
+		playerActions[21].playerPermission = false;
 		break;
 	case 3: /*Cell Block D*/
 		//LOCATIONS
@@ -220,6 +226,8 @@ void checkActions()
 		//ACTIONS
 		playerActions[24].playerPermission = true;
 		if (player.hasBoardGame) playerActions[25].playerPermission = true;
+
+		playerActions[21].playerPermission = false;
 		break;
 	case 4: /*Reception*/
 		//LOCATIONS
@@ -356,13 +364,13 @@ void checkActions()
 	case 15: /*Personal Cell*/
 		//LOCATIONS
 		playerActions[0].playerPermission = true;
-		playerActions[17].playerPermission = true;
+		if (player.playerStartedTunnel == true) playerActions[17].playerPermission = true;
 
 		//ACTIONS
 		playerActions[58].playerPermission = true;
 		playerActions[59].playerPermission = true;
 		playerActions[60].playerPermission = true;
-		playerActions[61].playerPermission = true;
+		if (player.playerStartedTunnel == false) playerActions[61].playerPermission = true;
 		break;
 	case 16: /*Shower*/
 		//LOCATIONS

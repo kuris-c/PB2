@@ -323,6 +323,11 @@ bool firstLook = true;
 bool discoveredTunnel = false;
 #pragma endregion
 
+#pragma region PLAYER IN TUNNEL VARIABLES
+int playerTunnelProgress = 0;
+int playerTunnelLocation = 0;
+#pragma endregion
+
 void gamePlay(int enterMethod)
 {
 		prisonRooms[playerLocation].enterRoom(enterMethod);
@@ -653,14 +658,6 @@ void UseInventoryItem()
 	- PORK PIE: QUICKLY REGENERATES HP
 	- ENERGY DRINK: QUICKLY REGENERATES STAMINA
 	ALL DONE*/
-}
-
-void TalkToPrisoners()
-{
-	/*PRISONER LIKES PLAYER, IF +50 THERE IS POSITIVE INTERACTIONS, IF LESS THAN ZERO THERE IS NEGATIVE
-	- CHANCE OF FIGHT STARTING IF BELOW 0 AND INTERACTING
-	- PLAYER SOCIAL SKILLS IMPROVES
-	- PLAYER RAPPORT COULD INCREASE OR DECREASE*/
 }
 
 void SearchRandomCell()
@@ -1471,6 +1468,7 @@ void WatchTV()
 	std::cout << "\n[" << "\033[0;32m" << "You notice you are more adept at using commputers." << "\033[0;m" << "]\n";
 	player.playerRapport += 1;
 	player.playerStamina += 5;
+	player.playerComputing += 5;
 	system("pause");
 }
 
@@ -2895,22 +2893,34 @@ void StoreContraband()
 
 void StartDiggingTunnel()
 {
-
+	system("CLS");
+	textTyper("You carve out a small tunnel just large enough to fit into behind your toilet block. \nYou realise that this space will be risky for you to travel through, and you should not spend too long in the tunnel or risk being caught.");
+	system("pause");
+	player.playerStartedTunnel = true;
 }
 
 void TakeShower()
 {
+	system("CLS");
+	textTyper("You walk into the shower block and begin to take your shower. It is not long before you are forced out for water conservation and prisoners dispersion.");
+	player.playerHappines += 2;
+	if (player.hasShampoo)
+	{
+		textTyper("\nYou had a better experience because you have shampoo in your position. Your happiness has increased more.");
+		player.playerHappines += shampoo.happinesBoost;
+	}
 
+	system("pause");
 }
 
 void InsideTunnel()
 {
-
+	if (playerTunnelProgress == 0);
 }
 
 void AttendTherapy()
 {
-
+	
 }
 
 void SearchThroughFiles()

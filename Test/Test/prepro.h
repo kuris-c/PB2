@@ -3,7 +3,6 @@
 #include <string>
 #include <stdlib.h>
 #define fori(x) for (int i = 0; i < (x); i++)
-#define pRelationship(x, functionName) if (sideCharacters[x].characterInAction) sideCharacters[x].functionName(); else prisoners[x].functionName();
 
 /*STORE PLAYER LOCATION*/extern int playerLocation;
 /*SETTINGS*/
@@ -138,11 +137,6 @@ public:
 
 	//ASSIGNED CELL
 	int assignedCell = 0;
-
-	void JoinGang()
-	{
-		std::cout << "\nNo";
-	}
 };
 extern Prisoners prisoners[499];
 
@@ -216,6 +210,7 @@ public:
 
 	//ESCAPE BOOLS
 	bool canDigTunnel = false;
+	bool playerStartedTunnel = false;
 
 	//PLAYER FUNCTIONS
 	void CheckClass(int playerClass)
@@ -262,38 +257,6 @@ public:
 	}
 };
 extern Player player;
-
-class SideCharacters : public Prisoners
-{
-public:
-	//BASIC INFORMATION
-	bool characterInAction = false;
-	std::string characterName ="Steve";
-	int characterAge = 0;
-
-	//PLAYER INTERACTION VARIABLES
-	int characterHP = 100;
-	int likesPlayer = 0;
-
-	//ASSIGNED CELL
-	int assignedCell = 0;
-
-	void CheckSideCharacter(int prisonerNumber)
-	{
-		if (prisoners[prisonerNumber].likesPlayer < 50)
-		{
-			characterInAction = true;
-			characterName = (prisoners + prisonerNumber)->prisonerName;
-			std::cout << characterName;
-		}
-	}
-
-	void JoinGang()
-	{
-		std::cout << "\nYes";
-	}
-};
-extern SideCharacters sideCharacters[499];
 
 struct PlayerActions
 {
@@ -910,11 +873,13 @@ private:
 			break;
 		case 61:
 			StartDiggingTunnel();
-			addMin(2);
+			addMin(60);
+			gamePlay(0);
 			break;
 		case 62:
 			TakeShower();
-			addMin(2);
+			addMin(15);
+			gamePlay(0);
 			break;
 		case 63:
 			InsideTunnel();
