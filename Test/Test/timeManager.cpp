@@ -46,7 +46,7 @@ void checkTime()
 			smin = "0" + smin;
 		}
 
-		if (hour < 12)
+		if (hour < 10)
 		{
 			shour = "0" + std::to_string(hour);
 		}

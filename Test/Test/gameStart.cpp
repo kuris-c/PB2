@@ -16,7 +16,7 @@ void onGameRun(), mainMenu(), onGameStart();
 
 int main()
 {
-	srand(time(0));
+	srand((unsigned int)time(0));
 	displayGameWindow(1250, 750);
 	onGameRun();
 	onGameStart();

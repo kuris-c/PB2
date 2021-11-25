@@ -143,6 +143,11 @@ void createPrison()
 
 	//SPECIAL ROOM - PRISON ENTRANCE
 	actionDescriptions[68] = "Go To The Prison Entrance\n";
+
+	//SPECIAL ROOM - OUTSIDE THERAPIST OFFICE ON ROADSIDE
+
+	//SPECIAL ROOM - OUTSIDE OF TUNNEL NEAR GUARD POSTS
+
 #pragma endregion
 }
 
@@ -187,7 +192,7 @@ void checkActions()
 
 		//ACTIONS
 		playerActions[24].playerPermission = true;
-		playerActions[25].playerPermission = true;
+		if (player.hasBoardGame) playerActions[25].playerPermission = true;
 		break;
 	case 1: /*Cell Block B*/
 		//LOCATIONS
@@ -196,7 +201,7 @@ void checkActions()
 
 		//ACTIONS
 		playerActions[24].playerPermission = true;
-		playerActions[25].playerPermission = true;
+		if (player.hasBoardGame) playerActions[25].playerPermission = true;
 		break;
 	case 2: /*Cell Block C*/
 		//LOCATIONS
@@ -205,7 +210,7 @@ void checkActions()
 
 		//ACTIONS
 		playerActions[24].playerPermission = true;
-		playerActions[25].playerPermission = true;
+		if (player.hasBoardGame) playerActions[25].playerPermission = true;
 		break;
 	case 3: /*Cell Block D*/
 		//LOCATIONS
@@ -214,7 +219,7 @@ void checkActions()
 
 		//ACTIONS
 		playerActions[24].playerPermission = true;
-		playerActions[25].playerPermission = true;
+		if (player.hasBoardGame) playerActions[25].playerPermission = true;
 		break;
 	case 4: /*Reception*/
 		//LOCATIONS
@@ -223,10 +228,11 @@ void checkActions()
 
 		//ACTIONS
 		playerActions[26].playerPermission = true;
-		playerActions[27].playerPermission = true;
-		playerActions[28].playerPermission = true;
+		if (player.playerLockpicking > 25) playerActions[27].playerPermission = true;
+		if (player.playerComputing > 25) playerActions[28].playerPermission = true;
 
 		//CANCELLING GLOBALS
+		playerActions[19].playerPermission = false;
 		playerActions[23].playerPermission = false;
 		break;
 	case 5: /*Courtyard*/
@@ -252,7 +258,6 @@ void checkActions()
 		playerActions[31].playerPermission = true;
 		playerActions[32].playerPermission = true;
 		playerActions[33].playerPermission = true;
-		playerActions[34].playerPermission = true;
 		break;
 	case 6: /*Canteen*/
 		//LOCATIONS
@@ -269,7 +274,7 @@ void checkActions()
 		playerActions[5].playerPermission = true;
 
 		//ACTIONS
-		playerActions[36].playerPermission = true;
+		if (player.completedWorks == true) playerActions[36].playerPermission = true;
 		break;
 	case 8: /*Infirmary*/
 		//LOCATIONS
@@ -298,7 +303,7 @@ void checkActions()
 		playerActions[5].playerPermission = true;
 
 		//ACTIONS
-		playerActions[25].playerPermission = true;
+		if (player.hasBoardGame) playerActions[25].playerPermission = true;
 		playerActions[34].playerPermission = true;
 		playerActions[42].playerPermission = true;
 		playerActions[43].playerPermission = true;
@@ -312,7 +317,7 @@ void checkActions()
 		playerActions[5].playerPermission = true;
 
 		//ACTIONS
-		playerActions[46].playerPermission = true;
+		if (player.completedWorks == true) playerActions[46].playerPermission = true;
 		break;
 	case 12: /*Classroom*/
 		//LOCATIONS
@@ -321,9 +326,9 @@ void checkActions()
 		playerActions[5].playerPermission = true;
 
 		//ACTIONS
-		playerActions[47].playerPermission = true;
-		playerActions[48].playerPermission = true;
-		playerActions[49].playerPermission = true;
+		if (player.completedMaths != true) playerActions[47].playerPermission = true;
+		if (player.completedEnglish != true) playerActions[48].playerPermission = true;
+		if (player.completedWorks != true) playerActions[49].playerPermission = true;
 		break;
 	case 13: /*Prison Store*/
 		//LOCATIONS
@@ -332,7 +337,7 @@ void checkActions()
 		playerActions[5].playerPermission = true;
 
 		//ACTIONS
-		playerActions[50].playerPermission = true;
+		if (player.completedWorks == true) playerActions[50].playerPermission = true;
 		playerActions[51].playerPermission = true;
 		break;
 	case 14: /*Visitation*/
@@ -372,7 +377,7 @@ void checkActions()
 
 		//ACTIONS
 		playerActions[63].playerPermission = true;
-		playerActions[64].playerPermission = true;
+		if (player.hasSpoon) playerActions[64].playerPermission = true;
 		playerActions[65].playerPermission = true;
 		break;
 	case 18: /*Therapist Office*/
@@ -380,7 +385,7 @@ void checkActions()
 		playerActions[8].playerPermission = true;
 
 		//ACTIONS
-		playerActions[66].playerPermission = true;
+		if (player.AccessToTherapy == true) playerActions[66].playerPermission = true;
 		playerActions[67].playerPermission = true;
 		break;
 	}

@@ -38,11 +38,14 @@ void addMin(int mins);
 void displayTime();
 void checkTime();
 
+//ESCAPE BOOLS AND FUNCTIONS
+extern bool discoveredTunnel;
+
 //GAME PLAY FUNCTIONS
 void inputTooltip();
 void checkActions();
 
-void PlayerFight();
+void PlayerFight(int prisonerFighter);
 void PlayerFire();
 void ContrabandSearch();
 void UseInventoryItem();
@@ -64,7 +67,9 @@ void ConsultDoctor();
 void PrayAtChapel(std::string prayerType); //Silence, Prayer Session, Mass
 void JoinAA();
 void WatchTV();
-void JoinClass(std::string classType); //Maths, English, Works
+void JoinEnglishClass();
+void JoinMathsClass();
+void JoinWorksClass();
 void ShopAtStore();
 void JoinVisitation(std::string playerGuest); //Family, Lawyer, Prisoner Penpal, Lover, Supplier
 void MakePhoneCall();
@@ -80,6 +85,9 @@ void SearchThroughFiles();
 
 struct InventoryItems
 {
+	std::string itemName;
+	double itemCost;
+
 	bool inPlayerPosession;
 
 	//Damage Weapons
@@ -90,6 +98,9 @@ struct InventoryItems
 
 	//Stamina Items
 	int staminaBoost;
+
+	//Happiness Items
+	int happinesBoost;
 };
 extern InventoryItems lighter;
 extern InventoryItems spoon;
@@ -98,8 +109,21 @@ extern InventoryItems knife;
 extern InventoryItems tazer;
 extern InventoryItems handgun;
 extern InventoryItems candy;
-extern InventoryItems porkPie;
+extern InventoryItems crisps;
+extern InventoryItems sodaDrink;
 extern InventoryItems energyDrink;
+extern InventoryItems porkPie;
+extern InventoryItems ramen;
+extern InventoryItems sausageBeans;
+extern InventoryItems carrotCake;
+extern InventoryItems honeyBun;
+extern InventoryItems gingerBread;
+extern InventoryItems kiplingCakes;
+extern InventoryItems phoneCallToken;
+extern InventoryItems boardGame;
+extern InventoryItems shampoo;
+extern InventoryItems magazine;
+extern InventoryItems personalRadio;
 
 class Prisoners
 {
@@ -126,9 +150,10 @@ class Player : public Prisoners
 {
 public:
 	//BASIC INFORMATION
-	std::string playerName;
-	int playerAge;
-	int playerClass;
+	std::string playerName = "Steve Irwin";
+	int playerAge = 0;
+	int playerClass = 0;
+	double playerCurrency = 0;
 
 	//PLAYER STATS
 	int playerHP = 100;
@@ -136,14 +161,19 @@ public:
 	int playerStrength = 0;
 	int playerRapport = 0;
 	int playerDamage = 0;
+	int playerHappines = 50;
+	bool AccessToTherapy = false;
 
 	//PLAYER SKILLS
 	int playerCombat = 5;
 	int playerComputing = 0;
 	int playerLockpicking = 0;
+	int playerRunningSpeed = 2;
+	int playerFootball = 0;
 
 	//PLAYER INVENTORY
-	int inventoryItemID[5]{ 0,0,0,0,0 };
+	std::string inventoryItemName[5]{ "None","None","None","None","None" };
+	bool inventoryFull = false;
 
 	//CONTRABAND CHANCES
 	int findContrabandChance = 0;
@@ -158,14 +188,34 @@ public:
 	bool hasTazer = false;
 	bool hasHandgun = false;
 
+	bool hasDrugs = false;
+
 	bool hasCandy = false;
-	bool hasPorkPie = false;
+	bool hasCrisps = false;
+	bool hasSodaDrink = false;
 	bool hasEnergyDrink = false;
+
+	bool hasPorkPie = false;
+	bool hasRamen = false;
+	bool hasSausageBeans = false;
+	bool hasCarrotCake = false;
+	bool hasHoneyBun = false;
+	bool hasGingerBread = false;
+	bool hasKiplingCakes = false;
+
+	bool hasPhoneToken = false;
+	bool hasBoardGame = false;
+	bool hasShampoo = false;
+	bool hasMagazine = false;
+	bool hasPersonalRadio = false;
 
 	//CLASSROOM BOOLS
 	bool completedEnglish = false;
 	bool completedMaths = false;
 	bool completedWorks = false;
+
+	//ESCAPE BOOLS
+	bool canDigTunnel = false;
 
 	//PLAYER FUNCTIONS
 	void CheckClass(int playerClass)
@@ -195,6 +245,21 @@ public:
 		if (hasHandgun == true) playerDamage = playerStrength + handgun.weaponDamage;
 		else playerDamage = playerStrength;
 	}
+
+	void CheckStamina()
+	{
+		if (playerStamina < 10)
+		{
+			system("CLS");
+			textTyper("Your stamina is extremely low, you should consider resting soon.");
+			system("pause");
+		}
+	}
+
+	void CheckInventory()
+	{
+		std::cout << "PLAYER INVENTORY\nSlot 1: " << inventoryItemName[0] << " Slot 2: " << inventoryItemName[1] << " Slot 3: " << inventoryItemName[2] << " Slot 4: " << inventoryItemName[3] << " Slot 5: " << inventoryItemName[4] << std::endl;
+	}
 };
 extern Player player;
 
@@ -203,15 +268,15 @@ class SideCharacters : public Prisoners
 public:
 	//BASIC INFORMATION
 	bool characterInAction = false;
-	std::string characterName;
-	int characterAge;
+	std::string characterName ="Steve";
+	int characterAge = 0;
 
 	//PLAYER INTERACTION VARIABLES
 	int characterHP = 100;
 	int likesPlayer = 0;
 
 	//ASSIGNED CELL
-	int assignedCell;
+	int assignedCell = 0;
 
 	void CheckSideCharacter(int prisonerNumber)
 	{
@@ -257,6 +322,7 @@ private:
 	int printedAction[70];
 
 public:
+	//PLAYER HAS ENTERED ROOM
 	void enterRoom(int enterMethod)
 	{
 		//CLEAR CONSOLE
@@ -275,11 +341,13 @@ public:
 	}
 
 private:
+	//DETERMINE PLAYER ACCESS TO ROOM
 	void PlayerAccess()
 	{
 
 	}
 
+	//SHOW ROOM DESCRIPTION
 	void ShowRoomDescription(int enterMethod)
 	{
 		if (firstVisit)
@@ -291,6 +359,7 @@ private:
 		else textTyper(enterMethods[enterMethod] + roomName + ". " + roomDescription);
 	}
 
+	//SHOW NUMBER OG GUARDS IN ROOM
 	void ShowRoomGuardCount()
 	{
 		switch (hour)
@@ -342,6 +411,7 @@ private:
 		}
 	}
 
+	//SHOW NUMBER OF PRISONERS IN ROOM
 	void ShowRoomPrisonerCount()
 	{
 		switch (hour)
@@ -393,6 +463,7 @@ private:
 		}
 	}
 
+	//SHOW LIST OF POSSIBLE ACTIONS
 	void DisplayPlayerActions()
 	{
 		//CHECK ACTION PERMISSIONS
@@ -435,6 +506,7 @@ private:
 		}
 	}
 
+	//ENTER ACTION INTO SWITCH
 	void PlayerActionChoice()
 	{
 		inputTooltip();
@@ -519,6 +591,7 @@ private:
 		}
 	}
 
+	//EXECUTE ACTION FUNCTION
 	void CompleteAction(int actionNumber)
 	{
 		switch (actionNumber)
@@ -619,13 +692,18 @@ private:
 			gamePlay(0);
 			break;
 		case 19:
-			PlayerFight();
+			int prisonerFighter;
+			if (hour > 7 && hour < 22) prisonerFighter = rand() % pPresentAtDay[hour - 7];
+			else prisonerFighter = rand() % pPresentAtNight;
+			PlayerFight(prisonerFighter);
 			addMin(2);
 			if (player.playerHP < 5 && player.playerHP > 0)
 			{
 				playerLocation = 8;
+				player.playerStamina = 100;
 				gamePlay(1);
 			}
+			player.CheckStamina();
 			break;
 		case 20:
 			PlayerFire();
@@ -653,11 +731,13 @@ private:
 			break;
 		case 26:
 			BreakIn("sideRoom");
-			addMin(2);
+			addMin(5);
+			gamePlay(0);
 			break;
 		case 27:
 			BreakIn("guardCabinet");
 			addMin(2);
+			gamePlay(0);
 			break;
 		case 28:
 			RaiseAlarm();
@@ -669,91 +749,128 @@ private:
 			break;
 		case 30:
 			WatchPrisoners();
-			addMin(2);
+			addMin(15);
+			gamePlay(0);
 			break;
 		case 31:
 			GoForRun();
-			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 32:
 			TrainingDummies();
-			addMin(2);
+			addMin(60);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 33:
 			Meditation();
-			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 34:
 			EatMeal(playerLocation);
 			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 35:
 			UseVendingMachine(playerLocation);
-			addMin(2);
+			addMin(1);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 36:
 			PrisonerWork(playerLocation);
 			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 37:
 			HealthCheckup();
 			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 38:
 			ConsultDoctor();
 			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 39:
 			PrayAtChapel("silence");
 			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 40:
 			PrayAtChapel("prayerSession");
 			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 41:
 			PrayAtChapel("mass");
 			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 42:
 			JoinAA();
 			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 43:
 			PlayMiniGames("tableFootball");
 			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 44:
 			PlayMiniGames("chess");
 			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 45:
 			WatchTV();
-			addMin(2);
+			addMin(60);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 46:
 			PrisonerWork(playerLocation);
 			addMin(2);
 			break;
 		case 47:
-			JoinClass("maths");
-			addMin(2);
+			addMin(60);
+			JoinMathsClass();
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 48:
-			JoinClass("english");
-			addMin(2);
+			addMin(60);
+			JoinEnglishClass();
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 49:
-			JoinClass("works");
-			addMin(2);
+			addMin(60);
+			JoinWorksClass();
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 50:
 			PrisonerWork(playerLocation);
 			addMin(2);
 			break;
 		case 51:
+			addMin(15);
 			ShopAtStore();
-			addMin(2);
+			player.CheckStamina();
+			gamePlay(0);
 			break;
 		case 52:
 			JoinVisitation("family");

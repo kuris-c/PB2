@@ -45,8 +45,6 @@ void gameLose(std::string loseMessage, int widthLength)
 
 }
 
-//INSERT OPTIONS MENU
-
 void textTyper(std::string inputText)
 {
 	int i = 0;
